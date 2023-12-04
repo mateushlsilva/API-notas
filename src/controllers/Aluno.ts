@@ -1,4 +1,4 @@
-import { ObjectId } from "typeorm";
+import { ObjectId } from "mongodb";
 import AppDataSource from "../data-source";
 import { Aluno } from "../models";
 import { Request, Response } from "express";
@@ -14,14 +14,17 @@ class AlunoController{
         }
     }
 
-    public async getOne(req: Request, res: Response): Promise<Response>{
+    public async getOne(req: Request, res: Response): Promise<Response>{       
         try{
             const id:any = new ObjectId(req.params.uuid)
             const rep = AppDataSource.getMongoRepository(Aluno)
             const find:any = await rep.findOneOrFail(id).catch((err) => {
                 return res.status(404).json({erro: true, message: "Aluno não existe!", tipoErro: err})
             })
+            return res.status(200).json({erro: false, message: "Aluno pego com sucesso!", aluno: find})
         }catch(err){
+            console.log(err);
+            
             return res.status(400).json({erro: true, message: "Erro ao pegar o aluno!", tipoErro: err})
         }
     }
