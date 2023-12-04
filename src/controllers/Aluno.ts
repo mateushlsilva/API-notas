@@ -85,6 +85,20 @@ class AlunoController{
             return res.status(400).json({erro: true, message: "Erro ao alterar aluno!", tipoErro: err})
         }
     }
+
+    public async delete(req: Request, res: Response): Promise<Response> {
+        try{
+            const id: any = req.params.uuid
+            const rep = AppDataSource.getMongoRepository(Aluno)
+                const find:any = await rep.findOneOrFail(id).catch((err) => {
+                    return res.status(404).json({erro: true, message: "Aluno não existe!", tipoErro: err})
+                })
+            await rep.remove(find)
+            return res.status(200).json({erro: false, message: "Aluno deletado com sucesso!"})
+        }catch(err){
+            return res.status(400).json({erro: true, message: "Erro ao deletar o aluno!", tipoErro: err})
+        }
+      }
 }
 
 export default new AlunoController()
