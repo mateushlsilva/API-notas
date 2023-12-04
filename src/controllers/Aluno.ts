@@ -88,11 +88,11 @@ class AlunoController{
 
     public async delete(req: Request, res: Response): Promise<Response> {
         try{
-            const id: any = req.params.uuid
+            const id:any = new ObjectId(req.params.uuid)
             const rep = AppDataSource.getMongoRepository(Aluno)
-                const find:any = await rep.findOneOrFail(id).catch((err) => {
-                    return res.status(404).json({erro: true, message: "Aluno não existe!", tipoErro: err})
-                })
+            const find:any = await rep.findOneOrFail(id).catch((err) => {
+                return res.status(404).json({erro: true, message: "Aluno não existe!", tipoErro: err})
+            })
             await rep.remove(find)
             return res.status(200).json({erro: false, message: "Aluno deletado com sucesso!"})
         }catch(err){

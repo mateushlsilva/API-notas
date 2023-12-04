@@ -8,5 +8,6 @@ routes.post("/", AlunoController.post)
 routes.get("/one/:uuid", AlunoController.getOne)
 routes.put("/:uuid", AlunoController.put)
 routes.patch("/:uuid", AlunoController.patchNotas)
+routes.delete("/:uuid", AlunoController.delete)
 
 export default routes
