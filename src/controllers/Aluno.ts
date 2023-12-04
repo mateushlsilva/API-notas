@@ -44,6 +44,31 @@ class AlunoController{
             return res.status(400).json({erro: true, message: "Erro ao cadastrar novo aluno!", tipoErro: err})
         }
     }
+
+    public async put(req: Request, res: Response): Promise<Response>{
+        try{
+            const id:any = new ObjectId(req.params.uuid)
+            const alter = req.body
+            const rep = AppDataSource.getMongoRepository(Aluno)
+            const find:any = await rep.findOneOrFail(id).catch((err) => {
+                return res.status(404).json({erro: true, message: "Aluno não existe!", tipoErro: err})
+            })
+            if(alter.cpf !== null || alter.cpf !== undefined){
+                find.cpf = alter.cpf
+            }
+            if(alter.ra !== null || alter.ra !== undefined){
+                find.ra = alter.ra
+            }
+            if(alter.nome !== null || alter.nome !== undefined){
+                find.nome = alter.nome
+            }
+            
+            await rep.save(find)
+            return res.status(200).json({erro: false, message: "Aluno alterado com sucesso!"})
+        }catch(err){
+            return res.status(400).json({erro: true, message: "Erro ao alterar aluno!", tipoErro: err})
+        }
+    }
 }
 
 export default new AlunoController()
